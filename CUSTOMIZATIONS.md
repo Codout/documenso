@@ -194,7 +194,28 @@ public, non-secret value baked at build time.
 
 ## 8. CI/CD — Phase H
 
-_To be populated when Phase H ships._
+| What | Files | Why | Revert |
+| ---- | ----- | --- | ------ |
+| GHCR build pipeline | `.github/workflows/codout-build.yml` (new) | Codout-fork-only build/push to `ghcr.io/codout/documenso-codout`. Runs lint + tsc before publishing. Tags by 12-char git SHA always; tags `codout-v*` produce `<tag>` and `latest` aliases. Multi-arch (amd64 + arm64) via Docker Buildx. The Codout brand flag is passed as `--build-arg NEXT_PUBLIC_CODOUT_BRANDED_BUILD=true`. | Delete the file. |
+
+The upstream `publish.yml` is **not modified**. It continues to push
+`documenso/documenso` to DockerHub + GHCR under the upstream namespace
+when triggered. Codout's pipeline is fully additive.
+
+**Repository requirements before the workflow can succeed:**
+
+1. The `codout` GitHub organisation/user must allow GHCR package writes
+   for this repository. By default `permissions: packages: write` plus
+   `${{ secrets.GITHUB_TOKEN }}` is enough; no extra PAT is needed.
+2. After the first push, the GHCR package is private. To pull from
+   Azure Container Apps, either:
+   - mark the package public in
+     `https://github.com/users/codout/packages/container/documenso-codout/settings`
+     (recommended for AGPL fork transparency), or
+   - configure ACA with a registry pull secret containing a GitHub PAT
+     with `read:packages`.
+3. The `quality` job runs `npm run lint` and `tsc --noEmit`. If either
+   fails the image is not built.
 
 ## Files that intentionally remain untouched
 
