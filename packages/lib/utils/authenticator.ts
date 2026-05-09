@@ -1,4 +1,5 @@
 import { NEXT_PUBLIC_WEBAPP_URL } from '../constants/app';
+import { APP_NAME } from '../constants/app-branding';
 import { PASSKEY_TIMEOUT } from '../constants/auth';
 
 /**
@@ -9,7 +10,7 @@ export const getAuthenticatorOptions = () => {
   const rpId = webAppBaseUrl.hostname;
 
   return {
-    rpName: 'Documenso',
+    rpName: APP_NAME,
     rpId,
     origin: NEXT_PUBLIC_WEBAPP_URL(),
     timeout: PASSKEY_TIMEOUT,

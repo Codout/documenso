@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { env } from '../utils/env';
+import { APP_NAME } from './app-branding';
 import { NEXT_PUBLIC_WEBAPP_URL } from './app';
 
 export const SALT_ROUNDS = 12;
@@ -19,7 +20,7 @@ export const ZNameSchema = z
   });
 
 export const IDENTITY_PROVIDER_NAME: Record<string, string> = {
-  DOCUMENSO: 'Documenso',
+  DOCUMENSO: APP_NAME,
   GOOGLE: 'Google',
   MICROSOFT: 'Microsoft',
   OIDC: 'OIDC',

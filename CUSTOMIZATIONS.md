@@ -58,7 +58,29 @@ impact of the leftover PNGs is minimal. Replace each before public launch.
 
 ## 3. Brand strings (constants) — Phase C
 
-_To be populated when Phase C ships._
+| What | Files | Why | Revert |
+| ---- | ----- | --- | ------ |
+| Email `FROM_NAME` / `FROM_ADDRESS` defaults | `packages/lib/constants/email.ts` | Wire to `APP_NAME`; default address falls back to `noreply@sign.codout.com` when the Codout flag is set. Env vars still win. | Restore literal `'Documenso'` / `'noreply@documenso.com'`. |
+| `IDENTITY_PROVIDER_NAME.DOCUMENSO` label | `packages/lib/constants/auth.ts` | The DB enum value `DOCUMENSO` is immutable (migrations), but the **display label** maps to `APP_NAME`. | Restore `'Documenso'` literal. |
+| Document-flow "from" dropdown | `packages/ui/primitives/template-flow/add-template-settings.tsx`, `packages/ui/primitives/document-flow/add-subject.tsx` | The `-1` sentinel renders the platform default sender — should show the Codout name. | Restore `Documenso` literal. |
+| TOTP issuer | `packages/lib/server-only/2fa/setup-2fa.ts` | What appears in authenticator apps when registering 2FA. New registrations show "Codout Sign". Existing registrations keep showing the previous label until re-registered (this is cosmetic and does not invalidate codes). | Restore `'Documenso'` literal. |
+| WebAuthn `rpName` | `packages/lib/utils/authenticator.ts` | Display name in the OS prompt during passkey registration. `rpId` (the host) is unchanged, so existing passkeys continue to work. | Restore `'Documenso'` literal. |
+| Forgot/reset password mailers | `packages/lib/server-only/auth/send-forgot-password.ts`, `send-reset-password.ts` | These two were duplicating the env fallback logic. Now they delegate to the centralised `FROM_NAME`/`FROM_ADDRESS` from `constants/email.ts`. | Inline the env reads. |
+| `SUPPORT_EMAIL` indirection | `packages/lib/constants/app.ts` | Now reads from `APP_SUPPORT_EMAIL` (which honours `NEXT_PUBLIC_SUPPORT_EMAIL` and the build flag). | Restore the inline literal. |
+| Embed completion fallback name | `apps/remix/app/components/embed/embed-document-completed.tsx` | When `name` prop is missing, show `APP_NAME` instead of `'Documenso'`. | Restore the literal. |
+
+**Not changed in this phase** (deliberate):
+
+- The `IdentityProvider` Prisma enum value `DOCUMENSO`. Renaming it would
+  require a migration that renames a string value across every existing
+  user row — too risky for the cosmetic gain.
+- `<Trans>...Documenso...</Trans>` strings in the English UI. These are
+  translation **keys**; they get replaced by the pt-BR catalog (Phase D)
+  for the default user locale and only appear if a user explicitly
+  switches to en. Leaving the en source unchanged keeps the upstream
+  Lingui catalog merge clean.
+- `packages/lib/server-only/license/license-client.ts` (license server URL).
+  Override at runtime via `INTERNAL_OVERRIDE_LICENSE_SERVER_URL`.
 
 ## 4. Default locale — Phase D
 
