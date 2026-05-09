@@ -1,3 +1,4 @@
+import { IS_BILLING_ENABLED } from '@documenso/lib/constants/app';
 import { env } from '@documenso/lib/utils/env';
 import { Trans } from '@lingui/react/macro';
 
@@ -25,7 +26,7 @@ export const TemplateDocumentSelfSigned = ({ documentName, assetBaseUrl }: Templ
       <Section className="flex-row items-center justify-center">
         <Section>
           <Column align="center">
-            <Text className="font-semibold text-[#7AC455] text-base">
+            <Text className="font-semibold text-[#4F46E5] text-base">
               <Img src={getAssetUrl('/static/completed.png')} className="-mt-0.5 mr-2 inline h-7 w-7 align-middle" />
               <Trans>Completed</Trans>
             </Text>
@@ -59,13 +60,15 @@ export const TemplateDocumentSelfSigned = ({ documentName, assetBaseUrl }: Templ
             <Trans>Create account</Trans>
           </Button>
 
-          <Button
-            className="rounded-lg border border-slate-200 border-solid px-4 py-2 text-center font-medium text-black text-sm no-underline"
-            href="https://documenso.com/pricing"
-          >
-            <Img src={getAssetUrl('/static/review.png')} className="mr-2 mb-0.5 inline h-5 w-5 align-middle" />
-            <Trans>View plans</Trans>
-          </Button>
+          {IS_BILLING_ENABLED() && (
+            <Button
+              className="rounded-lg border border-slate-200 border-solid px-4 py-2 text-center font-medium text-black text-sm no-underline"
+              href={`${NEXT_PUBLIC_WEBAPP_URL ?? 'http://localhost:3000'}/settings/billing`}
+            >
+              <Img src={getAssetUrl('/static/review.png')} className="mr-2 mb-0.5 inline h-5 w-5 align-middle" />
+              <Trans>View plans</Trans>
+            </Button>
+          )}
         </Section>
       </Section>
     </>

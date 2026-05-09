@@ -109,7 +109,33 @@ English source — visible only to pt-BR users on those specific pages.
 
 ## 5. Email templates — Phase E
 
-_To be populated when Phase E ships._
+| What | Files | Why | Revert |
+| ---- | ----- | --- | ------ |
+| Footer "Powered by" link target | `packages/email/template-components/template-footer.tsx` | Routes through `APP_NAME` and `APP_SOURCE_REPO_URL` when the Codout build flag is on; falls back to the upstream `documen.so/mail-footer` link otherwise. Inline color is now indigo `#4F46E5`. | Restore the hardcoded link/text. |
+| Footer fallback company block | `packages/email/template-components/template-footer.tsx` | Adds a Codout variant (`APP_PUBLISHER` + the configured `NEXT_PUBLIC_WEBAPP_URL`) for the branded build. The upstream "Documenso, Inc. / 2261 Market Street …" block is preserved unchanged behind `!IS_CODOUT_BRANDED_BUILD()`. | Remove the new branch. |
+| Self-signed "View plans" CTA | `packages/email/template-components/template-document-self-signed.tsx` | Was a hard link to `https://documenso.com/pricing`. Now only renders when `IS_BILLING_ENABLED()` is true and points to `${WEBAPP_URL}/settings/billing`. On the Codout build (billing disabled by default) the button disappears entirely. | Restore the hardcoded button. |
+| Inline accent hex `#7AC455` → `#4F46E5` | `template-document-self-signed.tsx`, `template-document-recipient-signed.tsx`, `template-document-completed.tsx` | These three templates inlined the Documenso accent green directly (it does not flow through the Tailwind palette in email templates). Swapped to indigo. | Restore `#7AC455`. |
+| Logo `alt` text | 17 templates + `template-document-image.tsx` | Generic `alt="Logo"` instead of `alt="Documenso Logo"`. Avoids a per-template `APP_NAME` import; visual brand still comes from the actual image. | `sed -i 's|alt="Logo"|alt="Documenso Logo"|g'` in `packages/email/templates/`. |
+| Preview-default URLs | All templates with `… = 'https://documenso.com'` and `…@documenso.com` | These are dev/preview defaults exercised by `react-email`'s preview server when the template is rendered without props. Replaced with `https://example.com` / `@example.com` so a leak in production cannot ever surface a Documenso brand link. | `sed -i "s|'https://example.com'|'https://documenso.com'|g; s|@example.com|@documenso.com|g"`. |
+
+**Pending manual step before deploy** (covered by Phase D notes too):
+
+```bash
+npm run translate:extract
+npm run translate:compile
+```
+
+This re-extracts new strings (footer "sent using {APP_NAME}" wrapper,
+Open Source page) and compiles the message catalogs, including pt-BR.
+Until then, those specific strings render as the English source for
+pt-BR users.
+
+The binary `packages/email/static/logo.png` is still the upstream
+Documenso green logo. Replace it with a real Codout Sign PNG (≥ 64 px
+high, 4× density recommended) before launch — until then, all email
+recipients see the Documenso logo while the surrounding text/links are
+already Codout-branded. This is documented in CUSTOMIZATIONS.md §2's
+"Pending manual work" list.
 
 ## 6. Feature gates behind `NEXT_PUBLIC_CODOUT_BRANDED_BUILD` — Phase F
 
