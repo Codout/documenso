@@ -1,5 +1,7 @@
+import { Trans } from '@lingui/react/macro';
+import { Link, Outlet } from 'react-router';
+
 import backgroundPattern from '@documenso/assets/images/background-pattern.png';
-import { Outlet } from 'react-router';
 
 export default function Layout() {
   return (
@@ -21,6 +23,12 @@ export default function Layout() {
           <Outlet />
         </div>
       </div>
+
+      <footer className="text-muted-foreground/80 mt-12 text-center text-xs">
+        <Link to="/open-source" className="hover:text-foreground underline-offset-2 hover:underline">
+          <Trans>Open Source</Trans>
+        </Link>
+      </footer>
     </main>
   );
 }

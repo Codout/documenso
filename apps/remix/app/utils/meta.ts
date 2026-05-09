@@ -1,26 +1,30 @@
-import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 import { i18n, type MessageDescriptor } from '@lingui/core';
 
-export const appMetaTags = (title?: MessageDescriptor) => {
-  const description =
-    'Join Documenso, the open signing infrastructure, and get a 10x better signing experience. Pricing starts at $30/mo. forever! Sign in now and enjoy a faster, smarter, and more beautiful document signing process. Integrates with your favorite tools, customizable, and expandable. Support our mission and become a part of our open-source community.';
+import {
+  APP_DESCRIPTION,
+  APP_KEYWORDS,
+  APP_NAME,
+  APP_OG_TITLE,
+  APP_PUBLISHER,
+} from '@documenso/lib/constants/app-branding';
+import { NEXT_PUBLIC_WEBAPP_URL } from '@documenso/lib/constants/app';
 
+export const appMetaTags = (title?: MessageDescriptor) => {
   return [
     {
-      title: title ? `${i18n._(title)} - Documenso` : 'Documenso',
+      title: title ? `${i18n._(title)} - ${APP_NAME}` : APP_NAME,
     },
     {
       name: 'description',
-      content: description,
+      content: APP_DESCRIPTION,
     },
     {
       name: 'keywords',
-      content:
-        'Documenso, open source, DocuSign alternative, document signing, open signing infrastructure, open-source community, fast signing, beautiful signing, smart templates',
+      content: APP_KEYWORDS,
     },
     {
       name: 'author',
-      content: 'Documenso, Inc.',
+      content: APP_PUBLISHER,
     },
     {
       name: 'robots',
@@ -28,11 +32,11 @@ export const appMetaTags = (title?: MessageDescriptor) => {
     },
     {
       property: 'og:title',
-      content: 'Documenso - The Open Source DocuSign Alternative',
+      content: APP_OG_TITLE,
     },
     {
       property: 'og:description',
-      content: description,
+      content: APP_DESCRIPTION,
     },
     {
       property: 'og:image',
@@ -47,12 +51,8 @@ export const appMetaTags = (title?: MessageDescriptor) => {
       content: 'summary_large_image',
     },
     {
-      name: 'twitter:site',
-      content: '@documenso',
-    },
-    {
       name: 'twitter:description',
-      content: description,
+      content: APP_DESCRIPTION,
     },
     {
       name: 'twitter:image',

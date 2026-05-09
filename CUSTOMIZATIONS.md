@@ -32,7 +32,29 @@ documented intent below (unless upstream changed semantics).
 
 ## 2. Branding (visual) — Phase B
 
-_To be populated when Phase B ships._
+| What | Files | Why | Revert |
+| ---- | ----- | --- | ------ |
+| Indigo theme tokens | `packages/ui/styles/theme.css` (`--primary`, `--primary-foreground`, `--ring`, `--field-card`, `--field-card-border`, `--new-primary-*`, dark variants) | Replace Documenso green (`hsl(95 71% 67%)`) with Codout indigo (`hsl(244 75% 59%)` / `#4F46E5`). | `git checkout upstream/main -- packages/ui/styles/theme.css` |
+| Tailwind palette re-aliased | `packages/tailwind-config/index.cjs` | The codebase has many `bg-documenso-*` / `text-documenso-700` utility usages. Re-aliasing the `documenso` palette to indigo updates them all without a class rename. Added a parallel `codout` palette for new code. | Restore the original Documenso green hex values. |
+| Web manifest brand | `apps/remix/public/site.webmanifest` | Name, short_name and `theme_color` (`#4F46E5`). | Same as above. |
+| HTML meta tags | `apps/remix/app/utils/meta.ts` | Replaced hardcoded "Documenso", description, keywords, OG/Twitter tags with `APP_*` constants. | Restore literal strings. |
+| Brand constants module | `packages/lib/constants/app-branding.ts` (new) | Single source of truth for brand strings. Honours `NEXT_PUBLIC_CODOUT_BRANDED_BUILD` and per-key overrides (`NEXT_PUBLIC_APP_NAME`, etc.). When the flag is off, the upstream Documenso strings are used verbatim. | Delete the file and inline strings. |
+| SVG placeholder logo | `packages/assets/logo.svg` (new) | Codout Sign wordmark + mark. **Placeholder** — replace with the real brand asset before launch. | Delete file. |
+| SVG placeholder favicon | `apps/remix/public/icon.svg` (new) | Single-glyph "C" favicon in indigo. Wired in `root.tsx` via `<link rel="icon" type="image/svg+xml">`. | Remove the link tag and delete file. |
+| Favicon link priority | `apps/remix/app/root.tsx` | Adds the SVG icon link before the PNG fallbacks so modern browsers pick it up. | Remove the new line. |
+| Open Source page (AGPL §13) | `apps/remix/app/routes/_unauthenticated+/open-source.tsx` (new) | Public attribution page with link to this fork and to upstream. Required by AGPL when running as a network service. | Delete file. |
+| Footer link to Open Source | `apps/remix/app/routes/_unauthenticated+/_layout.tsx` | Surfaces the source link from every public-facing page. | Revert layout file. |
+
+**Pending manual work** (cannot generate from a CLI without ImageMagick):
+the binary placeholders are still the upstream Documenso green PNG/JPG files:
+
+- `apps/remix/public/favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `android-chrome-192x192.png`, `android-chrome-512x512.png`
+- `apps/remix/public/opengraph-image.jpg`
+- `packages/assets/logo.png`, `packages/assets/logo_icon.png`, `packages/assets/static/logo.png`
+- `packages/email/static/logo.png` (used by email templates — see Phase E)
+
+The SVG favicon takes precedence in modern browsers, so the immediate visual
+impact of the leftover PNGs is minimal. Replace each before public launch.
 
 ## 3. Brand strings (constants) — Phase C
 
