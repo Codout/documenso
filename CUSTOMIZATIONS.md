@@ -217,6 +217,50 @@ when triggered. Codout's pipeline is fully additive.
 3. The `quality` job runs `npm run lint` and `tsc --noEmit`. If either
    fails the image is not built.
 
+## 9. Sanity & deploy gates — Phase I
+
+The following checks **must** be re-run on the developer machine
+before a production deploy. They cannot be run inside the harness that
+authored these changes (no `node_modules`):
+
+```bash
+npm install
+npm run lint              # biome check
+npx tsc --noEmit          # workspace-wide type check
+npm run translate:extract # pick up new English source strings
+npm run translate:compile # rebuild .mjs catalogs
+docker build \
+  -f docker/Dockerfile \
+  --build-arg NEXT_PUBLIC_CODOUT_BRANDED_BUILD=true \
+  -t codout-sign:dev .
+```
+
+What was checked in the authoring environment:
+
+- Brace balance in every new/heavily-edited file (no syntax structure
+  drift).
+- Import graph for new constants does not introduce a cycle:
+  `app-branding.ts` → `utils/env.ts`; `feature-flags.ts` → `app-branding.ts`.
+  `app.ts` imports from `app-branding.ts`; `auth.ts` imports from both
+  `app.ts` and `app-branding.ts`. Both converge in `app-branding.ts`.
+- YAML of `.github/workflows/codout-build.yml` parses with PyYAML.
+- No `<Link>`, `<Trans>`, `<Img>` or `Button` import was removed without
+  replacing the consumer.
+
+Smoke tests **the operator must run** after first deploy
+(also documented in `DEPLOY_AZURE.md` §9):
+
+- `/api/health` returns `200 ok` (or `200 warning` if the cert is being
+  read from `NEXT_PRIVATE_SIGNING_LOCAL_FILE_CONTENTS` — see
+  troubleshooting).
+- `/api/certificate-status` returns `{ isAvailable: true }`.
+- `/open-source` resolves and links to https://github.com/codout/documenso.
+- Sign up a test user, confirmation email arrives via SES, footer reads
+  "sent using Codout Sign" with a link to the fork.
+- Upload + send + sign flow completes end-to-end. Open the resulting PDF
+  in Adobe Reader: signature must be valid and timestamp present (if a
+  TSA is configured).
+
 ## Files that intentionally remain untouched
 
 - `packages/signing/**` — PDF cryptographic signing pipeline.
