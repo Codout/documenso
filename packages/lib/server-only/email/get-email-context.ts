@@ -12,6 +12,7 @@ import { match, P } from 'ts-pattern';
 
 import { DOCUMENSO_INTERNAL_EMAIL } from '../../constants/email';
 import { AppError, AppErrorCode } from '../../errors/app-error';
+import { isLiberatedClaimFlag } from '../../utils/feature-flags';
 import {
   organisationGlobalSettingsToBranding,
   teamGlobalSettingsToBranding,
@@ -218,7 +219,7 @@ const getAllowedEmails = (
     organisationClaim: OrganisationClaim;
   },
 ) => {
-  if (!organisation.organisationClaim.flags.emailDomains) {
+  if (!isLiberatedClaimFlag(organisation.organisationClaim.flags.emailDomains)) {
     return [];
   }
 

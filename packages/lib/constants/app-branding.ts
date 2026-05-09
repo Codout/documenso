@@ -17,6 +17,17 @@ import { env } from '@documenso/lib/utils/env';
 export const IS_CODOUT_BRANDED_BUILD = (): boolean =>
   env('NEXT_PUBLIC_CODOUT_BRANDED_BUILD') === 'true';
 
+/**
+ * True when this is a Codout-branded build running without commercial
+ * billing — i.e. an AGPL self-hosted instance. Used to bypass enterprise
+ * feature gates that exist purely as monetisation hooks in the upstream
+ * SaaS product. Compliance gates (21 CFR Part 11, HIPAA) are intentionally
+ * NOT lifted by this helper because they have legal weight beyond
+ * licensing and require explicit operator opt-in per organisation.
+ */
+export const IS_SELF_HOSTED_PREMIUM = (): boolean =>
+  IS_CODOUT_BRANDED_BUILD() && env('NEXT_PUBLIC_FEATURE_BILLING_ENABLED') !== 'true';
+
 const upstreamDefaults = {
   appName: 'Documenso',
   publisher: 'Documenso, Inc.',

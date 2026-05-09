@@ -139,8 +139,46 @@ already Codout-branded. This is documented in CUSTOMIZATIONS.md §2's
 
 ## 6. Feature gates behind `NEXT_PUBLIC_CODOUT_BRANDED_BUILD` — Phase F
 
-_To be populated when Phase F ships. Each gate documented as: file:line, what
-it gates, what we change, and the legal/operational rationale._
+A single helper, **`IS_SELF_HOSTED_PREMIUM()`** (in
+`packages/lib/constants/app-branding.ts`), returns `true` when both
+`NEXT_PUBLIC_CODOUT_BRANDED_BUILD=true` **and**
+`NEXT_PUBLIC_FEATURE_BILLING_ENABLED` is unset/false. That is, it
+identifies an AGPL self-hosted Codout build. Two thin wrappers in
+`packages/lib/utils/feature-flags.ts` consume it:
+
+- `isLiberatedClaimFlag(flag)` — true if the per-org claim is true OR if
+  `IS_SELF_HOSTED_PREMIUM()`.
+- `isLiberatedBillingGate(billingEnabled)` — same idea, for the existing
+  `IS_BILLING_ENABLED` style of gate.
+
+This was used at the gate sites — **not** by mutating the loaded
+`organisationClaim` object — so that:
+
+1. Database state stays semantically true (the org's claim is still
+   "free", we just choose to honour the action anyway).
+2. Reverts and merges from upstream are tractable: each gate site has
+   exactly one wrapped boolean.
+
+| Gate | File / line | Liberated? | Rationale |
+| ---- | ----------- | ---------- | --------- |
+| Document/recipient/template plan limits | `packages/ee/server-only/limits/server.ts:46` | **already by upstream** | The existing `if (!IS_BILLING_ENABLED())` short-circuits to `SELFHOSTED_PLAN_LIMITS`. No change needed. |
+| Custom email domains (create) | `packages/trpc/server/enterprise-router/create-organisation-email-domain.ts:28,50` | **yes** | Operator may want senders from their own domain. |
+| Custom email domains (read for sending) | `packages/lib/server-only/email/get-email-context.ts:221` | **yes** | Outbound delivery honours configured domains. |
+| Organisation authentication portal — read | `packages/trpc/server/enterprise-router/get-organisation-authentication-portal.ts:68` | **yes** | Self-hosted needs first-class SSO. |
+| Organisation authentication portal — update | `packages/trpc/server/enterprise-router/update-organisation-authentication-portal.ts:28,50` | **yes** | Same. |
+| Embedded authoring | `packages/trpc/server/embedding-router/create-embedding-presign-token.ts:34-52` | **already by upstream** | The gate is already wrapped in `if (IS_BILLING_ENABLED())` — bypassed on self-host. No change needed. |
+| `hidePoweredBy` (footer / certificate) | per-org claim | **not changed** | The Codout-branded footer (Phase E) is honest self-attribution; let orgs configure their own white-label preference. |
+| 21 CFR Part 11 reauthentication | `packages/lib/server-only/recipient/{create,update}-envelope-recipients.ts`, `set-{document,template}-recipients.ts`, `envelope/{create,update}-envelope.ts` | **NOT liberated** | This is a **regulatory** gate, not a monetisation one. 21 CFR Part 11 (FDA electronic records / signatures) requires explicit operator opt-in per organisation because it changes legal weight of audit logs and signatures. The right way to enable it is via the per-org claim, even on self-host. |
+| HIPAA | (no direct code gate found in this audit) | **NOT liberated** | Same reasoning. If a future upstream commit adds a HIPAA gate, leave it tied to the per-org claim. |
+
+| What | Files | Why | Revert |
+| ---- | ----- | --- | ------ |
+| `IS_SELF_HOSTED_PREMIUM` helper | `packages/lib/constants/app-branding.ts` | Single source of truth for the self-hosted premium signal. | Delete the function. |
+| `isLiberatedClaimFlag` / `isLiberatedBillingGate` | `packages/lib/utils/feature-flags.ts` (new) | Thin wrappers used at gate sites. | Delete the file. |
+| `create-organisation-email-domain.ts` | wraps two gates | See above. | Restore raw `if (!IS_BILLING_ENABLED())` and `if (!flags.emailDomains)`. |
+| `get-email-context.ts` | wraps `getAllowedEmails` claim check | See above. | Restore raw flag read. |
+| `get-organisation-authentication-portal.ts` | wraps claim check | See above. | Restore raw flag read. |
+| `update-organisation-authentication-portal.ts` | wraps two gates | See above. | Restore raw `IS_BILLING_ENABLED` and flag read. |
 
 ## 7. Docker — Phase G
 

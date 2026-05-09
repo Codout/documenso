@@ -3,6 +3,7 @@ import { DOCUMENSO_ENCRYPTION_KEY } from '@documenso/lib/constants/crypto';
 import { ORGANISATION_MEMBER_ROLE_PERMISSIONS_MAP } from '@documenso/lib/constants/organisations';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { symmetricEncrypt } from '@documenso/lib/universal/crypto';
+import { isLiberatedBillingGate, isLiberatedClaimFlag } from '@documenso/lib/utils/feature-flags';
 import { buildOrganisationWhereQuery } from '@documenso/lib/utils/organisations';
 import { prisma } from '@documenso/prisma';
 
@@ -25,7 +26,7 @@ export const updateOrganisationAuthenticationPortalRoute = authenticatedProcedur
       },
     });
 
-    if (!IS_BILLING_ENABLED()) {
+    if (!isLiberatedBillingGate(IS_BILLING_ENABLED())) {
       throw new AppError(AppErrorCode.INVALID_REQUEST, {
         message: 'Billing is not enabled',
       });
@@ -47,7 +48,7 @@ export const updateOrganisationAuthenticationPortalRoute = authenticatedProcedur
       throw new AppError(AppErrorCode.UNAUTHORIZED);
     }
 
-    if (!organisation.organisationClaim.flags.authenticationPortal) {
+    if (!isLiberatedClaimFlag(organisation.organisationClaim.flags.authenticationPortal)) {
       throw new AppError(AppErrorCode.INVALID_REQUEST, {
         message: 'Authentication portal is not allowed for this organisation',
       });

@@ -2,6 +2,7 @@ import { createEmailDomain } from '@documenso/ee/server-only/lib/create-email-do
 import { IS_BILLING_ENABLED } from '@documenso/lib/constants/app';
 import { ORGANISATION_MEMBER_ROLE_PERMISSIONS_MAP } from '@documenso/lib/constants/organisations';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
+import { isLiberatedBillingGate, isLiberatedClaimFlag } from '@documenso/lib/utils/feature-flags';
 import { buildOrganisationWhereQuery } from '@documenso/lib/utils/organisations';
 import { prisma } from '@documenso/prisma';
 
@@ -25,7 +26,7 @@ export const createOrganisationEmailDomainRoute = authenticatedProcedure
       },
     });
 
-    if (!IS_BILLING_ENABLED()) {
+    if (!isLiberatedBillingGate(IS_BILLING_ENABLED())) {
       throw new AppError(AppErrorCode.INVALID_REQUEST, {
         message: 'Billing is not enabled',
       });
@@ -47,7 +48,7 @@ export const createOrganisationEmailDomainRoute = authenticatedProcedure
       throw new AppError(AppErrorCode.UNAUTHORIZED);
     }
 
-    if (!organisation.organisationClaim.flags.emailDomains) {
+    if (!isLiberatedClaimFlag(organisation.organisationClaim.flags.emailDomains)) {
       throw new AppError(AppErrorCode.INVALID_BODY, {
         message: 'Email domains are not enabled for this organisation',
       });
