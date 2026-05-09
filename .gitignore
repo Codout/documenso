@@ -74,3 +74,15 @@ tmp/
 
 # opencode
 .opencode/package-lock.json
+
+# codout: never commit signing material or deploy secrets
+certs/
+*.p12
+*.pfx
+*.key
+*.crt
+*.pem.local
+*.base64
+.env.azure
+.env.azure.local
+deploy.local.sh
