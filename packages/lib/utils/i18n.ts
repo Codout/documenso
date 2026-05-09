@@ -3,7 +3,7 @@ import { i18n } from '@lingui/core';
 import type { MacroMessageDescriptor } from '@lingui/core/macro';
 
 import type { I18nLocaleData, SupportedLanguageCodes } from '../constants/i18n';
-import { APP_I18N_OPTIONS } from '../constants/i18n';
+import { APP_I18N_OPTIONS, getDefaultUserLang } from '../constants/i18n';
 import { env } from './env';
 
 export async function getTranslations(locale: string) {
@@ -77,7 +77,7 @@ export const extractLocaleData = ({ headers }: ExtractLocaleDataOptions): I18nLo
   });
 
   return {
-    lang: languages[0] || APP_I18N_OPTIONS.sourceLang,
+    lang: languages[0] || getDefaultUserLang(),
     locales: headerLocales,
   };
 };

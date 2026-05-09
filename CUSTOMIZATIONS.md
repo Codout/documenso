@@ -84,7 +84,28 @@ impact of the leftover PNGs is minimal. Replace each before public launch.
 
 ## 4. Default locale — Phase D
 
-_To be populated when Phase D ships._
+| What | Files | Why | Revert |
+| ---- | ----- | --- | ------ |
+| `getDefaultUserLang()` | `packages/lib/constants/locales.ts` | Adds a runtime resolver: `pt-BR` when `NEXT_PUBLIC_CODOUT_BRANDED_BUILD=true`, otherwise the upstream `sourceLang` (`en`). | Remove the function. |
+| `extractLocaleData` fallback | `packages/lib/utils/i18n.ts` | Falls back to `getDefaultUserLang()` instead of always `sourceLang`. Users with a browser `accept-language` matching any other supported locale (es, fr, de, …) still get their preferred language — the new default only applies when **no** locale match is found and the user has no cookie set. | Restore `APP_I18N_OPTIONS.sourceLang`. |
+
+`APP_I18N_OPTIONS.sourceLang` itself is **not changed**. Lingui extracts
+message keys from the codebase using that value, so flipping it would
+confuse the translation toolchain. The codebase ships English source
+strings; pt-BR users see the catalog at `packages/lib/translations/pt-BR/web.po`.
+
+`APP_I18N_OPTIONS.defaultLocale` (`'en-US'`) is **not changed**. It is used
+to format dates and numbers inside the audit-log and certificate PDFs.
+Changing it would alter the formatting of historical documents at
+re-render time, which is undesirable. Each user's preferred locale is
+already passed through `setLocale()` at the relevant call sites; the
+constant only matters when no user locale is available.
+
+**Manual step before deploy**: run `npm run translate:extract && npm run translate:compile`
+so that any new English strings introduced by this fork (Open Source
+page, etc.) appear in `packages/lib/translations/pt-BR/web.po` for
+translation. Until they are translated they will fall through to the
+English source — visible only to pt-BR users on those specific pages.
 
 ## 5. Email templates — Phase E
 
