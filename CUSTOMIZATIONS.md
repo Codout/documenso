@@ -182,7 +182,15 @@ This was used at the gate sites — **not** by mutating the loaded
 
 ## 7. Docker — Phase G
 
-_To be populated when Phase G ships._
+| What | Files | Why | Revert |
+| ---- | ----- | --- | ------ |
+| Brand-aware startup banner | `docker/start.sh` | Banner, "useful links" block and server-start log read from `NEXT_PUBLIC_CODOUT_BRANDED_BUILD`. When unset, the banner is the upstream Documenso text verbatim. Also stops emitting the false-negative warning when `NEXT_PRIVATE_SIGNING_LOCAL_FILE_CONTENTS` is set (the pure-base64 deploy mode). | Restore the original printf block. |
+| `NEXT_PUBLIC_CODOUT_BRANDED_BUILD` build arg | `docker/Dockerfile` (installer stage) | The flag must be present at build time so module-level constants like `APP_NAME` resolve correctly during SSR. Pass `--build-arg NEXT_PUBLIC_CODOUT_BRANDED_BUILD=true` when building the Codout image. | Remove the ARG/ENV block. |
+
+The runner stage was **not** modified — encryption-key, telemetry-key
+and other secrets continue to be passed through environment variables
+at runtime, never baked. The Codout build flag is intentionally a
+public, non-secret value baked at build time.
 
 ## 8. CI/CD — Phase H
 

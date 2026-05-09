@@ -57,6 +57,12 @@ ENV NEXT_PRIVATE_TELEMETRY_KEY="$NEXT_PRIVATE_TELEMETRY_KEY"
 ARG NEXT_PRIVATE_TELEMETRY_HOST=""
 ENV NEXT_PRIVATE_TELEMETRY_HOST="$NEXT_PRIVATE_TELEMETRY_HOST"
 
+# Codout brand build flag — when set to "true", builds the Codout Sign
+# variant (theme, default locale, brand strings, EE gate liberation).
+# Set via `--build-arg NEXT_PUBLIC_CODOUT_BRANDED_BUILD=true` to produce
+# the branded image; leave empty for an upstream-equivalent build.
+ARG NEXT_PUBLIC_CODOUT_BRANDED_BUILD=""
+ENV NEXT_PUBLIC_CODOUT_BRANDED_BUILD="$NEXT_PUBLIC_CODOUT_BRANDED_BUILD"
 
 # Uncomment and use build args to enable remote caching
 # ARG TURBO_TEAM
