@@ -86,3 +86,4 @@ certs/
 .env.azure
 .env.azure.local
 deploy.local.sh
+docker/codout-local/.env

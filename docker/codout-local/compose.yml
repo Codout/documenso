@@ -1,0 +1,94 @@
+# Codout Sign — local docker-compose stack.
+#
+# Brings up postgres + inbucket (mail capture) + minio (S3) + the Codout
+# Sign app image, all wired together. Ports are deliberately offset from
+# `npm run dx:up` so the two stacks can coexist if you also keep the
+# Node dev server running.
+#
+# Quick start (from the repo root):
+#
+#   cp docker/codout-local/.env.example docker/codout-local/.env
+#   # edit .env: paste the three openssl-generated secrets and your P12 base64
+#   docker compose -f docker/codout-local/compose.yml up --build
+#
+# Then open:
+#   App                     http://localhost:3100
+#   Captured emails (UI)    http://localhost:9100
+#   MinIO console           http://localhost:9101
+#   Postgres                localhost:54321  (user codout / pass codout)
+
+name: codout-sign-local
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: codout-postgres
+    environment:
+      POSTGRES_USER: codout
+      POSTGRES_PASSWORD: codout
+      POSTGRES_DB: codout_sign
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U codout -d codout_sign']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    ports:
+      - 54321:5432
+
+  mailserver:
+    image: inbucket/inbucket
+    container_name: codout-mailserver
+    ports:
+      - 9100:9000  # web UI
+      - 2501:2500  # SMTP
+      - 1101:1100  # POP3
+
+  minio:
+    image: minio/minio
+    container_name: codout-minio
+    environment:
+      MINIO_ROOT_USER: codout
+      MINIO_ROOT_PASSWORD: codoutpassword
+    ports:
+      - 9102:9002  # S3 API
+      - 9101:9001  # console
+    entrypoint: sh
+    command: -c 'mkdir -p /data/codout && minio server /data --console-address ":9001" --address ":9002"'
+    volumes:
+      - minio_data:/data
+
+  app:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile
+      args:
+        NEXT_PUBLIC_CODOUT_BRANDED_BUILD: 'true'
+    image: codout-sign:local
+    container_name: codout-app
+    env_file: .env
+    environment:
+      # These override .env so the app always points at the compose services
+      # by their service name (resolved on the compose network).
+      NEXT_PRIVATE_DATABASE_URL: postgres://codout:codout@postgres:5432/codout_sign
+      NEXT_PRIVATE_DIRECT_DATABASE_URL: postgres://codout:codout@postgres:5432/codout_sign
+      NEXT_PRIVATE_SMTP_TRANSPORT: smtp-auth
+      NEXT_PRIVATE_SMTP_HOST: mailserver
+      NEXT_PRIVATE_SMTP_PORT: '2500'
+      NEXT_PRIVATE_SMTP_USERNAME: codout
+      NEXT_PRIVATE_SMTP_PASSWORD: codout
+      NEXT_PUBLIC_CODOUT_BRANDED_BUILD: 'true'
+      DOCUMENSO_DISABLE_TELEMETRY: 'true'
+    ports:
+      - 3100:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailserver:
+        condition: service_started
+
+volumes:
+  postgres_data:
+  minio_data:
