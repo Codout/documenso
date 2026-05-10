@@ -57,6 +57,10 @@ msgstr "「{title}」は正常に削除されました"
 msgid "\"{title}\" has been successfully hidden"
 msgstr "「{title}」は正常に非表示になりました"
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "\"{UPSTREAM_PROJECT_NAME}\" is a trademark of its respective owner and is referenced here for attribution only. {APP_NAME} is a product of Codout and is not affiliated with or endorsed by the upstream project."
+msgstr ""
+
 #: apps/remix/app/components/forms/document-preferences-form.tsx
 msgid "\"Team Name\" has invited you to sign \"example document\"."
 msgstr "「Team Name」から「example document」への署名依頼が届いています。"
@@ -318,6 +322,10 @@ msgstr "{amount, plural, other {週間}}"
 #: packages/ui/components/document/expiration-period-picker.tsx
 msgid "{amount, plural, one {Year} other {Years}}"
 msgstr "{amount, plural, other {年}}"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "{APP_NAME} is built on top of {UPSTREAM_PROJECT_NAME}, an open source document signing platform licensed under the GNU Affero General Public License v3.0 (AGPL-3.0)."
+msgstr ""
 
 #: apps/remix/app/components/tables/internal-audit-log-table.tsx
 #: packages/lib/server-only/pdf/render-audit-logs.ts
@@ -2167,6 +2175,7 @@ msgid "Back"
 msgstr "戻る"
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "Back home"
 msgstr "ホームへ戻る"
 
@@ -2190,6 +2199,10 @@ msgstr "バックアップコード"
 #: apps/remix/app/routes/_authenticated+/admin+/site-settings.tsx
 msgid "Banner Updated"
 msgstr "バナーを更新しました"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Because {APP_NAME} is operated as a network service, the AGPL requires that the source code of the version you are interacting with is made available to you. The corresponding source for this instance is published publicly:"
+msgstr ""
 
 #: packages/email/template-components/template-confirmation-email.tsx
 msgid "Before you get started, please confirm your email address by clicking the button below:"
@@ -6242,6 +6255,7 @@ msgstr "文字間隔"
 
 #: apps/remix/app/components/general/admin-license-card.tsx
 #: apps/remix/app/components/general/admin-license-card.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "License"
 msgstr "ライセンス"
 
@@ -7184,6 +7198,11 @@ msgstr "問題が発生しました。"
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl._index.tsx
 msgid "Open menu"
 msgstr "メニューを開く"
+
+#: apps/remix/app/routes/_unauthenticated+/_layout.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Open Source"
+msgstr ""
 
 #: apps/remix/app/components/general/stack-avatars-with-tooltip.tsx
 msgid "Opened"
@@ -10405,6 +10424,10 @@ msgstr "次の署名者には署名フィールドが設定されていません
 msgid "The following team has been deleted. You will no longer be able to access this team and its documents"
 msgstr "次のチームは削除されました。このチームおよびそのドキュメントには、今後アクセスできません。"
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "The full text of the AGPL-3.0 license is available in the <0>LICENSE</0> file of the source repository."
+msgstr ""
+
 #. placeholder {0}: form.watch('name')
 #. placeholder {1}: form.watch('email')
 #: apps/remix/app/components/dialogs/assistant-confirmation-dialog.tsx
@@ -10768,8 +10791,8 @@ msgid "This document was created using a direct link."
 msgstr "この文書はダイレクトリンクから作成されました。"
 
 #: packages/email/template-components/template-footer.tsx
-msgid "This document was sent using <0>Documenso</0>."
-msgstr "このドキュメントは <0>Documenso</0> を使用して送信されました。"
+msgid "This document was sent using <0>{APP_NAME}</0>."
+msgstr ""
 
 #: apps/remix/app/components/dialogs/envelope-duplicate-dialog.tsx
 msgid "This document will be duplicated."
@@ -10822,6 +10845,10 @@ msgstr "このフィールドは変更も削除もできません。このテン
 #: apps/remix/app/components/dialogs/folder-delete-dialog.tsx
 msgid "This folder contains multiple items. Deleting it will remove all subfolders and move all nested documents and templates to the root folder."
 msgstr "このフォルダには複数のアイテムが含まれています。削除すると、すべてのサブフォルダが削除され、入れ子になったドキュメントとテンプレートはルートフォルダに移動されます。"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "This fork (running on this server):"
+msgstr ""
 
 #: apps/remix/app/components/general/envelope-editor/envelope-editor-settings-dialog.tsx
 #: packages/ui/primitives/template-flow/add-template-settings.tsx
@@ -11201,6 +11228,10 @@ msgstr "サインアップした署名者総数"
 #: apps/remix/app/routes/_authenticated+/admin+/stats.tsx
 msgid "Total Users"
 msgstr "ユーザー総数"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Trademarks"
+msgstr ""
 
 #: apps/remix/app/components/dialogs/team-delete-dialog.tsx
 msgid "Transfer documents to a different team"
@@ -11697,6 +11728,10 @@ msgstr "アップロードされたファイルは許可されていない形式
 #: apps/remix/app/components/general/envelope/envelope-drop-zone-wrapper.tsx
 msgid "Uploading"
 msgstr "アップロード中"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Upstream project:"
+msgstr ""
 
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx

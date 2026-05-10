@@ -52,6 +52,10 @@ msgstr "\"{title}\" has been successfully deleted"
 msgid "\"{title}\" has been successfully hidden"
 msgstr "\"{title}\" has been successfully hidden"
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "\"{UPSTREAM_PROJECT_NAME}\" is a trademark of its respective owner and is referenced here for attribution only. {APP_NAME} is a product of Codout and is not affiliated with or endorsed by the upstream project."
+msgstr "\"{UPSTREAM_PROJECT_NAME}\" is a trademark of its respective owner and is referenced here for attribution only. {APP_NAME} is a product of Codout and is not affiliated with or endorsed by the upstream project."
+
 #: apps/remix/app/components/forms/document-preferences-form.tsx
 msgid "\"Team Name\" has invited you to sign \"example document\"."
 msgstr "\"Team Name\" has invited you to sign \"example document\"."
@@ -313,6 +317,10 @@ msgstr "{amount, plural, one {Week} other {Weeks}}"
 #: packages/ui/components/document/expiration-period-picker.tsx
 msgid "{amount, plural, one {Year} other {Years}}"
 msgstr "{amount, plural, one {Year} other {Years}}"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "{APP_NAME} is built on top of {UPSTREAM_PROJECT_NAME}, an open source document signing platform licensed under the GNU Affero General Public License v3.0 (AGPL-3.0)."
+msgstr "{APP_NAME} is built on top of {UPSTREAM_PROJECT_NAME}, an open source document signing platform licensed under the GNU Affero General Public License v3.0 (AGPL-3.0)."
 
 #: apps/remix/app/components/tables/internal-audit-log-table.tsx
 #: packages/lib/server-only/pdf/render-audit-logs.ts
@@ -2162,6 +2170,7 @@ msgid "Back"
 msgstr "Back"
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "Back home"
 msgstr "Back home"
 
@@ -2185,6 +2194,10 @@ msgstr "Backup codes"
 #: apps/remix/app/routes/_authenticated+/admin+/site-settings.tsx
 msgid "Banner Updated"
 msgstr "Banner Updated"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Because {APP_NAME} is operated as a network service, the AGPL requires that the source code of the version you are interacting with is made available to you. The corresponding source for this instance is published publicly:"
+msgstr "Because {APP_NAME} is operated as a network service, the AGPL requires that the source code of the version you are interacting with is made available to you. The corresponding source for this instance is published publicly:"
 
 #: packages/email/template-components/template-confirmation-email.tsx
 msgid "Before you get started, please confirm your email address by clicking the button below:"
@@ -6237,6 +6250,7 @@ msgstr "Letter Spacing"
 
 #: apps/remix/app/components/general/admin-license-card.tsx
 #: apps/remix/app/components/general/admin-license-card.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "License"
 msgstr "License"
 
@@ -7179,6 +7193,11 @@ msgstr "Oops! Something went wrong."
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl._index.tsx
 msgid "Open menu"
 msgstr "Open menu"
+
+#: apps/remix/app/routes/_unauthenticated+/_layout.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Open Source"
+msgstr "Open Source"
 
 #: apps/remix/app/components/general/stack-avatars-with-tooltip.tsx
 msgid "Opened"
@@ -10400,6 +10419,10 @@ msgstr "The following signers are missing signature fields:"
 msgid "The following team has been deleted. You will no longer be able to access this team and its documents"
 msgstr "The following team has been deleted. You will no longer be able to access this team and its documents"
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "The full text of the AGPL-3.0 license is available in the <0>LICENSE</0> file of the source repository."
+msgstr "The full text of the AGPL-3.0 license is available in the <0>LICENSE</0> file of the source repository."
+
 #. placeholder {0}: form.watch('name')
 #. placeholder {1}: form.watch('email')
 #: apps/remix/app/components/dialogs/assistant-confirmation-dialog.tsx
@@ -10763,8 +10786,8 @@ msgid "This document was created using a direct link."
 msgstr "This document was created using a direct link."
 
 #: packages/email/template-components/template-footer.tsx
-msgid "This document was sent using <0>Documenso</0>."
-msgstr "This document was sent using <0>Documenso</0>."
+msgid "This document was sent using <0>{APP_NAME}</0>."
+msgstr "This document was sent using <0>{APP_NAME}</0>."
 
 #: apps/remix/app/components/dialogs/envelope-duplicate-dialog.tsx
 msgid "This document will be duplicated."
@@ -10817,6 +10840,10 @@ msgstr "This field cannot be modified or deleted. When you share this template's
 #: apps/remix/app/components/dialogs/folder-delete-dialog.tsx
 msgid "This folder contains multiple items. Deleting it will remove all subfolders and move all nested documents and templates to the root folder."
 msgstr "This folder contains multiple items. Deleting it will remove all subfolders and move all nested documents and templates to the root folder."
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "This fork (running on this server):"
+msgstr "This fork (running on this server):"
 
 #: apps/remix/app/components/general/envelope-editor/envelope-editor-settings-dialog.tsx
 #: packages/ui/primitives/template-flow/add-template-settings.tsx
@@ -11196,6 +11223,10 @@ msgstr "Total Signers that Signed Up"
 #: apps/remix/app/routes/_authenticated+/admin+/stats.tsx
 msgid "Total Users"
 msgstr "Total Users"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Trademarks"
+msgstr "Trademarks"
 
 #: apps/remix/app/components/dialogs/team-delete-dialog.tsx
 msgid "Transfer documents to a different team"
@@ -11692,6 +11723,10 @@ msgstr "Uploaded file not an allowed file type"
 #: apps/remix/app/components/general/envelope/envelope-drop-zone-wrapper.tsx
 msgid "Uploading"
 msgstr "Uploading"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Upstream project:"
+msgstr "Upstream project:"
 
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx

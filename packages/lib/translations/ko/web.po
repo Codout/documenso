@@ -57,6 +57,10 @@ msgstr "\"{title}\"이(가) 성공적으로 삭제되었습니다."
 msgid "\"{title}\" has been successfully hidden"
 msgstr "\"{title}\"이(가) 성공적으로 숨겨졌습니다"
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "\"{UPSTREAM_PROJECT_NAME}\" is a trademark of its respective owner and is referenced here for attribution only. {APP_NAME} is a product of Codout and is not affiliated with or endorsed by the upstream project."
+msgstr ""
+
 #: apps/remix/app/components/forms/document-preferences-form.tsx
 msgid "\"Team Name\" has invited you to sign \"example document\"."
 msgstr "\"Team Name\"이(가) \"example document\"에 서명하도록 귀하를 초대했습니다."
@@ -318,6 +322,10 @@ msgstr "{amount, plural, other {주}}"
 #: packages/ui/components/document/expiration-period-picker.tsx
 msgid "{amount, plural, one {Year} other {Years}}"
 msgstr "{amount, plural, other {년}}"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "{APP_NAME} is built on top of {UPSTREAM_PROJECT_NAME}, an open source document signing platform licensed under the GNU Affero General Public License v3.0 (AGPL-3.0)."
+msgstr ""
 
 #: apps/remix/app/components/tables/internal-audit-log-table.tsx
 #: packages/lib/server-only/pdf/render-audit-logs.ts
@@ -2167,6 +2175,7 @@ msgid "Back"
 msgstr "뒤로"
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "Back home"
 msgstr "홈으로 돌아가기"
 
@@ -2190,6 +2199,10 @@ msgstr "백업 코드"
 #: apps/remix/app/routes/_authenticated+/admin+/site-settings.tsx
 msgid "Banner Updated"
 msgstr "배너가 업데이트되었습니다"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Because {APP_NAME} is operated as a network service, the AGPL requires that the source code of the version you are interacting with is made available to you. The corresponding source for this instance is published publicly:"
+msgstr ""
 
 #: packages/email/template-components/template-confirmation-email.tsx
 msgid "Before you get started, please confirm your email address by clicking the button below:"
@@ -6242,6 +6255,7 @@ msgstr "자간"
 
 #: apps/remix/app/components/general/admin-license-card.tsx
 #: apps/remix/app/components/general/admin-license-card.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "License"
 msgstr "라이선스"
 
@@ -7184,6 +7198,11 @@ msgstr "문제가 발생했습니다."
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl._index.tsx
 msgid "Open menu"
 msgstr "메뉴 열기"
+
+#: apps/remix/app/routes/_unauthenticated+/_layout.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Open Source"
+msgstr ""
 
 #: apps/remix/app/components/general/stack-avatars-with-tooltip.tsx
 msgid "Opened"
@@ -10405,6 +10424,10 @@ msgstr "다음 서명자에게는 서명 필드가 없습니다:"
 msgid "The following team has been deleted. You will no longer be able to access this team and its documents"
 msgstr "다음 팀이 삭제되었습니다. 더 이상 이 팀과 그 문서에 접근할 수 없습니다."
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "The full text of the AGPL-3.0 license is available in the <0>LICENSE</0> file of the source repository."
+msgstr ""
+
 #. placeholder {0}: form.watch('name')
 #. placeholder {1}: form.watch('email')
 #: apps/remix/app/components/dialogs/assistant-confirmation-dialog.tsx
@@ -10768,8 +10791,8 @@ msgid "This document was created using a direct link."
 msgstr "이 문서는 직접 링크를 사용해 생성되었습니다."
 
 #: packages/email/template-components/template-footer.tsx
-msgid "This document was sent using <0>Documenso</0>."
-msgstr "이 문서는 <0>Documenso</0>를 사용하여 전송되었습니다."
+msgid "This document was sent using <0>{APP_NAME}</0>."
+msgstr ""
 
 #: apps/remix/app/components/dialogs/envelope-duplicate-dialog.tsx
 msgid "This document will be duplicated."
@@ -10822,6 +10845,10 @@ msgstr "이 필드는 수정하거나 삭제할 수 없습니다. 이 템플릿�
 #: apps/remix/app/components/dialogs/folder-delete-dialog.tsx
 msgid "This folder contains multiple items. Deleting it will remove all subfolders and move all nested documents and templates to the root folder."
 msgstr "이 폴더에는 여러 항목이 포함되어 있습니다. 삭제하면 모든 하위 폴더가 제거되고, 포함된 문서와 템플릿은 루트 폴더로 이동됩니다."
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "This fork (running on this server):"
+msgstr ""
 
 #: apps/remix/app/components/general/envelope-editor/envelope-editor-settings-dialog.tsx
 #: packages/ui/primitives/template-flow/add-template-settings.tsx
@@ -11201,6 +11228,10 @@ msgstr "가입한 전체 서명자 수"
 #: apps/remix/app/routes/_authenticated+/admin+/stats.tsx
 msgid "Total Users"
 msgstr "전체 사용자 수"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Trademarks"
+msgstr ""
 
 #: apps/remix/app/components/dialogs/team-delete-dialog.tsx
 msgid "Transfer documents to a different team"
@@ -11697,6 +11728,10 @@ msgstr "업로드된 파일이 허용된 형식이 아닙니다"
 #: apps/remix/app/components/general/envelope/envelope-drop-zone-wrapper.tsx
 msgid "Uploading"
 msgstr "업로드 중"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Upstream project:"
+msgstr ""
 
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx

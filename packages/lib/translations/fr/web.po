@@ -57,6 +57,10 @@ msgstr "\"{title}\" a été supprimé avec succès"
 msgid "\"{title}\" has been successfully hidden"
 msgstr "\"{title}\" a été masqué avec succès"
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "\"{UPSTREAM_PROJECT_NAME}\" is a trademark of its respective owner and is referenced here for attribution only. {APP_NAME} is a product of Codout and is not affiliated with or endorsed by the upstream project."
+msgstr ""
+
 #: apps/remix/app/components/forms/document-preferences-form.tsx
 msgid "\"Team Name\" has invited you to sign \"example document\"."
 msgstr "\"Team Name\" vous a invité à signer \"example document\"."
@@ -318,6 +322,10 @@ msgstr "{amount, plural, one {Semaine} other {Semaines}}"
 #: packages/ui/components/document/expiration-period-picker.tsx
 msgid "{amount, plural, one {Year} other {Years}}"
 msgstr "{amount, plural, one {Année} other {Années}}"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "{APP_NAME} is built on top of {UPSTREAM_PROJECT_NAME}, an open source document signing platform licensed under the GNU Affero General Public License v3.0 (AGPL-3.0)."
+msgstr ""
 
 #: apps/remix/app/components/tables/internal-audit-log-table.tsx
 #: packages/lib/server-only/pdf/render-audit-logs.ts
@@ -2167,6 +2175,7 @@ msgid "Back"
 msgstr "Retour"
 
 #: apps/remix/app/routes/_unauthenticated+/articles.signature-disclosure.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "Back home"
 msgstr "Retour au tableau de bord"
 
@@ -2190,6 +2199,10 @@ msgstr "Codes de sauvegarde"
 #: apps/remix/app/routes/_authenticated+/admin+/site-settings.tsx
 msgid "Banner Updated"
 msgstr "Bannière mise à jour"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Because {APP_NAME} is operated as a network service, the AGPL requires that the source code of the version you are interacting with is made available to you. The corresponding source for this instance is published publicly:"
+msgstr ""
 
 #: packages/email/template-components/template-confirmation-email.tsx
 msgid "Before you get started, please confirm your email address by clicking the button below:"
@@ -6242,6 +6255,7 @@ msgstr "Espacement des Lettres"
 
 #: apps/remix/app/components/general/admin-license-card.tsx
 #: apps/remix/app/components/general/admin-license-card.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
 msgid "License"
 msgstr "Licence"
 
@@ -7184,6 +7198,11 @@ msgstr "Oups ! Quelque chose a mal tourné."
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl._index.tsx
 msgid "Open menu"
 msgstr "Ouvrir le menu"
+
+#: apps/remix/app/routes/_unauthenticated+/_layout.tsx
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Open Source"
+msgstr ""
 
 #: apps/remix/app/components/general/stack-avatars-with-tooltip.tsx
 msgid "Opened"
@@ -10405,6 +10424,10 @@ msgstr "Les signataires suivants manquent de champs de signature :"
 msgid "The following team has been deleted. You will no longer be able to access this team and its documents"
 msgstr "L'équipe suivante a été supprimée. Vous ne pourrez plus accéder à cette équipe et à ses documents"
 
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "The full text of the AGPL-3.0 license is available in the <0>LICENSE</0> file of the source repository."
+msgstr ""
+
 #. placeholder {0}: form.watch('name')
 #. placeholder {1}: form.watch('email')
 #: apps/remix/app/components/dialogs/assistant-confirmation-dialog.tsx
@@ -10768,8 +10791,8 @@ msgid "This document was created using a direct link."
 msgstr "Ce document a été créé en utilisant un lien direct."
 
 #: packages/email/template-components/template-footer.tsx
-msgid "This document was sent using <0>Documenso</0>."
-msgstr "Ce document a été envoyé via <0>Documenso</0>."
+msgid "This document was sent using <0>{APP_NAME}</0>."
+msgstr ""
 
 #: apps/remix/app/components/dialogs/envelope-duplicate-dialog.tsx
 msgid "This document will be duplicated."
@@ -10822,6 +10845,10 @@ msgstr "Ce champ ne peut pas être modifié ou supprimé. Lorsque vous partagez 
 #: apps/remix/app/components/dialogs/folder-delete-dialog.tsx
 msgid "This folder contains multiple items. Deleting it will remove all subfolders and move all nested documents and templates to the root folder."
 msgstr "Ce dossier contient plusieurs éléments. Le supprimer supprimera tous les sous-dossiers et déplacera tous les documents et modèles intégrés vers le dossier racine."
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "This fork (running on this server):"
+msgstr ""
 
 #: apps/remix/app/components/general/envelope-editor/envelope-editor-settings-dialog.tsx
 #: packages/ui/primitives/template-flow/add-template-settings.tsx
@@ -11201,6 +11228,10 @@ msgstr "Total des signataires qui se sont inscrits"
 #: apps/remix/app/routes/_authenticated+/admin+/stats.tsx
 msgid "Total Users"
 msgstr "Total des utilisateurs"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Trademarks"
+msgstr ""
 
 #: apps/remix/app/components/dialogs/team-delete-dialog.tsx
 msgid "Transfer documents to a different team"
@@ -11697,6 +11728,10 @@ msgstr "Le fichier importé n'est pas un type de fichier autorisé"
 #: apps/remix/app/components/general/envelope/envelope-drop-zone-wrapper.tsx
 msgid "Uploading"
 msgstr "Importation en cours"
+
+#: apps/remix/app/routes/_unauthenticated+/open-source.tsx
+msgid "Upstream project:"
+msgstr ""
 
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx
