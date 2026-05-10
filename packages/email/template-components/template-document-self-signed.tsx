@@ -26,7 +26,7 @@ export const TemplateDocumentSelfSigned = ({ documentName, assetBaseUrl }: Templ
       <Section className="flex-row items-center justify-center">
         <Section>
           <Column align="center">
-            <Text className="font-semibold text-[#4F46E5] text-base">
+            <Text className="font-semibold text-[#00AED5] text-base">
               <Img src={getAssetUrl('/static/completed.png')} className="-mt-0.5 mr-2 inline h-7 w-7 align-middle" />
               <Trans>Completed</Trans>
             </Text>

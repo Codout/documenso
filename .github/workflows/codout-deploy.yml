@@ -1,0 +1,162 @@
+name: Codout Sign — deploy to Azure
+
+# Atualiza o Azure Container App `ca-codout-sign-prod` com uma imagem
+# previamente publicada por `codout-build.yml`. Desacoplado do build de
+# propósito: assim dá pra redeployar uma tag existente (rollback) sem
+# rebuild, ou deployar uma tag manual via workflow_dispatch.
+#
+# Trigger:
+#   - push de tag `codout-v*` → deploya essa tag (após o build terminar
+#     de publicar a imagem; aqui esperamos a imagem aparecer no GHCR)
+#   - manual dispatch → você escolhe a tag (útil pra rollback)
+#
+# Auth:
+#   - OIDC federado (sem secret de SP em GitHub). Setup em DEPLOY_AZURE.md.
+#   - Requer GitHub Environment "prod" — habilita aprovação manual antes
+#     do deploy (configure em Settings → Environments → prod).
+
+on:
+  push:
+    tags: ['codout-v*']
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Tag a deployar (ex: codout-v1.0.0, sha-abc123def456, latest)'
+        required: true
+        type: string
+        default: latest
+
+permissions:
+  id-token: write   # OIDC federado p/ Azure
+  contents: read
+  packages: read    # ler imagem privada do GHCR
+
+env:
+  IMAGE_NAME: ghcr.io/codout/documenso-codout
+  AZURE_RG: Codout-Sign
+  CONTAINER_APP: ca-codout-sign-prod
+
+jobs:
+  deploy:
+    name: Deploy to ${{ vars.AZURE_CONTAINER_APP || 'ca-codout-sign-prod' }}
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Resolve image tag
+        id: tag
+        run: |
+          if [[ "${{ github.event_name }}" == 'push' ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="${{ inputs.image_tag }}"
+          fi
+          echo "value=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Deploying tag: $TAG"
+
+      - name: Login to GHCR (read-only)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Wait for image on GHCR
+        # Quando trigger é tag push, esse workflow pode iniciar antes do
+        # build terminar. Polling rápido por até 30 min.
+        run: |
+          IMAGE="${IMAGE_NAME}:${{ steps.tag.outputs.value }}"
+          echo "Aguardando $IMAGE..."
+          for i in $(seq 1 60); do
+            if docker manifest inspect "$IMAGE" >/dev/null 2>&1; then
+              echo "Imagem disponível."
+              exit 0
+            fi
+            echo "Tentativa $i/60 — aguardando 30s..."
+            sleep 30
+          done
+          echo "::error::Imagem $IMAGE não apareceu no GHCR em 30min."
+          exit 1
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Capture current image (for rollback)
+        id: rollback
+        run: |
+          OLD=$(az containerapp show -g "$AZURE_RG" -n "$CONTAINER_APP" \
+            --query "properties.template.containers[0].image" -o tsv)
+          echo "previous_image=$OLD" >> "$GITHUB_OUTPUT"
+          echo "Previous image: $OLD"
+
+      - name: Update Container App
+        id: update
+        run: |
+          NEW_IMAGE="${IMAGE_NAME}:${{ steps.tag.outputs.value }}"
+          SUFFIX="ghaction-$(date +%Y%m%d-%H%M%S)"
+          az containerapp update \
+            -g "$AZURE_RG" -n "$CONTAINER_APP" \
+            --image "$NEW_IMAGE" \
+            --set-env-vars NEXT_PUBLIC_CODOUT_BRANDED_BUILD=true \
+            --revision-suffix "$SUFFIX"
+          echo "revision_suffix=$SUFFIX" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for new revision to be healthy
+        run: |
+          for i in $(seq 1 60); do
+            STATUS=$(az containerapp revision list \
+              -g "$AZURE_RG" -n "$CONTAINER_APP" \
+              --query "sort_by([], &properties.createdTime)[-1].properties.healthState" \
+              -o tsv)
+            echo "Estado: $STATUS"
+            if [[ "$STATUS" == "Healthy" ]]; then
+              exit 0
+            fi
+            if [[ "$STATUS" == "Unhealthy" ]]; then
+              echo "::error::Revision saiu Unhealthy."
+              exit 1
+            fi
+            sleep 10
+          done
+          echo "::error::Revision não ficou Healthy em 10 min."
+          exit 1
+
+      - name: Smoke test /api/health
+        run: |
+          FQDN=$(az containerapp show -g "$AZURE_RG" -n "$CONTAINER_APP" \
+            --query "properties.configuration.ingress.fqdn" -o tsv)
+          for i in $(seq 1 5); do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://$FQDN/api/health")
+            if [[ "$CODE" == "200" ]]; then
+              echo "✓ Health OK em https://$FQDN/api/health"
+              exit 0
+            fi
+            echo "HTTP $CODE — retry em 10s..."
+            sleep 10
+          done
+          echo "::error::Health check falhou (último HTTP: $CODE)."
+          exit 1
+
+      - name: Rollback on failure
+        if: failure() && steps.rollback.outputs.previous_image != ''
+        run: |
+          OLD="${{ steps.rollback.outputs.previous_image }}"
+          echo "::warning::Deploy falhou — revertendo pra $OLD"
+          az containerapp update \
+            -g "$AZURE_RG" -n "$CONTAINER_APP" \
+            --image "$OLD" \
+            --revision-suffix "rollback-$(date +%Y%m%d-%H%M%S)"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Deploy summary"
+            echo ""
+            echo "- Image: \`${IMAGE_NAME}:${{ steps.tag.outputs.value }}\`"
+            echo "- Revision suffix: \`${{ steps.update.outputs.revision_suffix }}\`"
+            echo "- Result: ${{ job.status }}"
+          } >> "$GITHUB_STEP_SUMMARY"

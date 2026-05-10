@@ -1,0 +1,29 @@
+# Default: let git auto-detect text files and normalize them to LF in the repo,
+# while still checking out with the OS-native line ending on Windows for editors.
+* text=auto
+
+# Shell scripts must be LF in the working tree too — they run inside Linux
+# containers (Alpine) where a CRLF in the shebang breaks `env` with exit 127.
+*.sh        text eol=lf
+
+# Other Linux-only artifacts shipped to containers / executed in CI.
+Dockerfile* text eol=lf
+*.bash      text eol=lf
+
+# Windows-only scripts: keep CRLF.
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+
+# Binary files — never touch.
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.pdf       binary
+*.p12       binary
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.eot       binary

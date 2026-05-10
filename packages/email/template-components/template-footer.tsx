@@ -28,7 +28,7 @@ export const TemplateFooter = ({ isDocument = true }: TemplateFooterProps) => {
         <Text className="my-4 text-base text-slate-400">
           <Trans>
             This document was sent using{' '}
-            <Link className="text-[#4F46E5]" href={poweredByHref}>
+            <Link className="text-[#00AED5]" href={poweredByHref}>
               {APP_NAME}
             </Link>
             .
